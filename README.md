@@ -5,7 +5,7 @@ Starkliup es el instalador del entorno Starkli, y se puede instalar fácilmente 
 curl https://get.starkli.sh | sh
 ```
 
-![Alt text](image.png)
+![Alt text](assets/image.png)
 
 Reinicie la terminal después de ejecutar el comando. Una vez que Starkliup se ha instalado correctamente, se puede usar para instalar Starkli
 
@@ -15,7 +15,7 @@ starkliup
 
 Al ejecutar el comando, verá lo siguiente:
 
-![Alt text](image-1.png)
+![Alt text](assets/image-1.png)
 
 
 Reinicie el terminal y ejecute el siguiente comando para verificar la instalación:
@@ -24,7 +24,7 @@ Reinicie el terminal y ejecute el siguiente comando para verificar la instalaci�
 starkli --version
 ```
 
-![Alt text](image-2.png)
+![Alt text](assets/image-2.png)
 
 Para actualizar a la última versión de Starkli, simplemente siga los pasos anteriores nuevamente.
 
@@ -36,7 +36,7 @@ Para usuarios de macOS y Linux, abra su terminal y ejecute el siguiente comando:
 curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh
 ```
 
-![Alt text](image-3.png)
+![Alt text](assets/image-3.png)
 
 Reinicie el terminal y ejecute el siguiente comando para verificar la instalación:
 
@@ -44,7 +44,7 @@ Reinicie el terminal y ejecute el siguiente comando para verificar la instalaci�
 scarb --version
 ```
 
-![Alt text](image-4.png)
+![Alt text](assets/image-4.png)
 
 Puede ejecutar el mismo comando para actualizarlo o directamnete añadir la versión manual de la versión que necesite de [aquí](https://github.com/software-mansion/scarb/releases)
 
@@ -52,7 +52,7 @@ Puede ejecutar el mismo comando para actualizarlo o directamnete añadir la vers
 curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh -s -- -v 0.6.0-alpha.4
 ```
 
-![Alt text](image-5.png)
+![Alt text](assets/image-5.png)
 
 Ejecute el siguiente comando para verificar su nueva versión, está vez la `2.1.0-rc4`:
 
@@ -60,7 +60,7 @@ Ejecute el siguiente comando para verificar su nueva versión, está vez la `2.1
 scarb --version
 ```
 
-![Alt text](image-6.png)
+![Alt text](assets/image-6.png)
 
 Puede revisar ahora que tanto Scarb como Starkli están instaladas y preparadas para probar esta gran combinación de herramientas para Starknet y Cairo:
 
@@ -69,7 +69,7 @@ scarb --version
 starkli  --version 
 ```
 
-![Alt text](image-7.png)
+![Alt text](assets/image-7.png)
 
 ## Cuenta
 
@@ -97,7 +97,7 @@ mkdir ~/.starkli-wallets/deployer
 
 Ahora podremos crear nuestro nueva cuenta y firmante o directamente exportar una pk y añadir una directamnte, en este caso hemos copiado la pk de una cuenta de braavos y vamos a usarla, le hemos dado el nombre de `Nadai_Signer.json` a esta cuenta, l acual vamos añadir la private key de la ceunta de ArgentX ode Braavos, en este caso usamos Braavos.
 
-![Alt text](image-8.png) ![Alt text](image-9.png)
+![Alt text](assets/image-8.png) ![Alt text](assets/image-9.png)
 
 ```bash
 starkli signer keystore from-key ~/.starkli-wallets/deployer/Nadai_Signer.json
@@ -105,7 +105,7 @@ starkli signer keystore from-key ~/.starkli-wallets/deployer/Nadai_Signer.json
 
 Aqui el  texto por seguiridad no se visualizaará asi que pegue u pf luego revise si desea añadir un contraseña o no, y añadala, si todo ha ido bien le deberá aperecer su clave pública debajo del archivo encriptado que cabamos de crear
 
-![Alt text](image-10.png)
+![Alt text](assets/image-10.png)
 
 
 En el indicador de clave privada, pegue la clave privada de su billetera inteligente. En el mensaje de contraseña, ingrese una contraseña de su elección. Necesitará esta contraseña para firmar transacciones con Starkli.
@@ -145,7 +145,7 @@ La clave pública fue devuelta por el comando `starkli signer keystore from-key 
 starkli signer keystore inspect ~/.starkli-wallets/deployer/Nadai_Signer.json
 ```
 
-![Alt text](image-12.png)
+![Alt text](assets/image-12.png)
 
 La dirección es la dirección de su billetera inteligente. Puede encontrarlo en las extensiones del navegador Braavos o Argent X. Luego use esta dirección para buscar el **class hash** de su billetera inteligente con el siguiente comando Starkli: 
 
@@ -153,7 +153,7 @@ La dirección es la dirección de su billetera inteligente. Puede encontrarlo en
 starkli class-hash-at 0x027f68d0d0f474b1a25f359a42dc49a3003a3522d71765a5e7658e68520d7826
 ```
 
-![Alt text](image-13.png)
+![Alt text](assets/image-13.png)
 
 Aquí un ejemplo de como debería quedar con los datos completos:
 
@@ -187,7 +187,7 @@ export STARKNET_ACCOUNT=~/.starkli-wallets/deployer/Nadai_Account.json
 export STARKNET_KEYSTORE=~/.starkli-wallets/deployer/Nadai_Signer.json
 ```
 
-![Alt text](image-11.png)
+![Alt text](assets/image-11.png)
 
 Con esto ya tendriamos lista nuestra Cuenta y Firmante para interactuar en Starknet a través de los comandos con Starkli,así que iremo sa preparar nuestro contrato para hacer el declare y el despliegue desde Scarb.
 
