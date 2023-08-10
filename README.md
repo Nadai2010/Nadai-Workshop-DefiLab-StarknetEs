@@ -1,3 +1,71 @@
+<div align="center">
+<img alt="starknet logo" src="" width="600" >
+  <h1 style="font-size: larger;">
+    <img src="https://github.com/Nadai2010/Nadai-SHARP-Starknet/blob/master/im%C3%A1genes/Starknet.png" width="40">
+    <strong> Workshop Starknet - Defilab & Escuela Crypto </strong> 
+    <img src="https://github.com/Nadai2010/Nadai-SHARP-Starknet/blob/master/im%C3%A1genes/Starknet.png" width="40">
+  </h1>
+
+<a href="https://github.com/Starknet-Es">
+<img src="https://img.shields.io/badge/Overview Starknet Es-Github-yellow"
+/>
+<a href="https://github.com/Starknet-Es/jueves-de-cairo">
+<img src="https://img.shields.io/badge/Jueves Cairo-Youtube-red?logo=youtube"/>
+</a>
+</a>
+<a href="https://twitter.com/StarkNetEs">
+<img src="https://img.shields.io/twitter/follow/StarknetEs?style=social"/>
+</a>
+<a href="https://twitter.com/DeFi_LaB">
+<img src="https://img.shields.io/twitter/follow/DeFi_LaB?style=social"/>
+</a>
+<a href="https://twitter.com/Nadai02010">
+<img src="https://img.shields.io/twitter/follow/Nadai02010?style=social"/>
+</a>
+<a href="https://github.com/Starknet-Es/StarknetEs-Aprendizaje">
+<img src="https://img.shields.io/github/stars/Starknet-Es/StarknetEs-Aprendizaje?style=social"/>
+</a>
+
+</div>
+
+## Recursos oficiales
+
+- [Starknet Doc](https://docs.starknet.io/documentation/) - Documentos oficiales de Starknet
+- [Starknet Book](https://book.starknet.io/) - Libro de Starknet
+- [Cairo Doc](https://www.cairo-lang.org/docs/) - Documentos oficiales de de Cairo
+- [Libro Cairo](https://cairo-book.github.io/) - Libro de Cairo
+- [Sintaxis Cairo by Nethermind](https://github.com/NethermindEth/CairoByExample/)  |   [Sintaxis Cairo by LambdaClass](https://github.com/lambdaclass/cairo-by-example/)
+
+---
+
+## Temas
+
+- [Instalación de Cairo](#configuración-de-su-entorno-de-desarrollo-de-starknet)
+    - [Pre-requisitos](#pre-requisitos)
+
+
+   
+
+---
+
+
+## Pre-requisitos
+Antes de continuar, asegúrese de tener instalados los siguientes pre-requisitos en su sistema:
+
+### Git
+[Git:](https://git-scm.com/) Será necesario tener `Git` instalado. A continuación, se muestra el comando para instalar `Git` en Ubuntu. Recuerda verificar las versiones disponibles para tu sistema operativo en el enlace proporcionado:
+
+```bash
+apt-get install git
+```
+
+Si se produce un error y te solicita entrar como administrador, agrega `sudo` al principio del comando. Se abrirá una ventana para ingresar tu contraseña (que será invisible) y luego puedes presionar Enter para continuar.
+
+```bash
+sudo apt-get install git
+```
+
+
 ## Guía Workshop StarknetEs  
 Starkliup es el instalador del entorno Starkli, y se puede instalar fácilmente utilizando la línea de comando con curl:
 
