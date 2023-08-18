@@ -571,7 +571,7 @@ starkli deploy --watch 0x064660ad51db85a7c7c5aa7e2adb0b51c5b86526f02f233368e5e03
 
 ![Alt text](image-14.png)
 
-Puede consultar el [Link del Contrato del Owner] para consultar que todo esté correcto, auqnue con Starkli podemos directamente hacer llamadas al contrato para revisar que esté todo correcto.
+Puede consultar el [Link del Contrato del Owner](https://testnet.starkscan.co/contract/0x028491f9e3d8b0005a649e08833330de371b5e227be05a0e0575f247df8691a5#read-write-contract) para consultar que todo esté correcto, auqnue con Starkli podemos directamente hacer llamadas al contrato para revisar que esté todo correcto.
 ## Invocando Contratos con Starkli
 Desde Starklipodemos cambiar el estado de un contrato, relaizar operaciones o hacer consultas a datos y estaso de la blockchain, asi que comprobemos si nuestro contrato de owner tiene como dueño la dirección del contrato de cuenta que añadimos, para ello deberemos hacer una `call` e indicar que función vamos a llamar, lo bueno de Starknet son los selectores y en este caso llamaremos a `get_owner` del contrato para que nos de quien es el dueño.
 
