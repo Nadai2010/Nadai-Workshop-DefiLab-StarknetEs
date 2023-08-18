@@ -259,16 +259,152 @@ export STARKNET_KEYSTORE=~/.starkli-wallets/deployer/Nadai_Signer.json
 
 Con esto ya tendriamos lista nuestra Cuenta y Firmante para interactuar en Starknet a través de los comandos con Starkli,así que iremo sa preparar nuestro contrato para hacer el declare y el despliegue desde Scarb.
 
-## Scarb 
+## Integrando Scarb en tu Flujo de Desarrollo 
+
+Los siguientes pasos ilustran un flujo de trabajo típico para desarrollar un contrato Starknet utilizando Scarb, aunque si ha cloando este repositorio y quiere sólo seguir los procesos, pase directamente al paso 4.
+
+1. Inicialización del Proyecto: Comienza ejecutando `scarb new` para crear un nuevo proyecto. Este comando generará automáticamente la estructura básica del proyecto, incluyendo un archivo de configuración `Scarb.toml` y un archivo inicial `src/lib.cairo`.
+
+2. Desarrollo del Contrato: Escribe tu código Cairo y guárdalo en el directorio src, en este caso usaremos como base un contrato de Propiedad `Owner.cairo`
+
+3. Gestión de Dependencias: Si tu contrato depende de bibliotecas externas, utiliza `scarb add` para incluir fácilmente estas dependencias en tu proyecto.
+
+4. Compilación del Contrato: Ejecuta `scarb build` para compilar tu contrato en código Sierra. Este código resultante puede luego ser examinado con más detalle o utilizado como entrada para otras herramientas o procesos.
+
+Al integrar Scarb en tu flujo de trabajo, aprovechas sus características para hacer tu proceso de desarrollo más eficiente y manejable.
+
+### Inicialización del Proyecto: 
+Primero crearemos nuestro nuevo paquete que generará el `Scarb.toml` y `src/lib.cairo` con el comando:
+
+```bash
+scarb new
+```
+
+![Alt text](image.png)
+
+En este paso aclaramos que para la gestión de los contratos se recomienda dejar el [`lib.cairo`](/Workshop/src/lib.cairo) para añadir por módulos y el contrato [`Owner.cairo`](/Workshop/src/Owner.cairo) o los que usemos por separado, auqnue también se puede usar el [`lib.cairo`](/Workshop/src/lib.cairo) con el código del contrato que queremos ejecutar si lo añadimos dentro, pero recomendamos para una mejor gestión la siguiente metódología.
+
+### Desarrollo del Contrato:
+Creamos un archivo en la carpeta `src` con el nombre del contrato que vamos a crear, en este caso [`Owner.cairo`](/Workshop/src/Owner.cairo) y pegamos el siguiente codigo:
+
+```rust
+use starknet::ContractAddress;
+
+#[starknet::interface]
+trait OwnableTrait<T> {
+    fn transfer_ownership(ref self: T, new_owner: ContractAddress);
+    fn get_owner(self: @T) -> ContractAddress;
+}
+
+#[starknet::contract]
+mod Ownable {
+    use super::ContractAddress;
+    use starknet::get_caller_address;
+
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+      OwnershipTransferred1: OwnershipTransferred1,  
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct OwnershipTransferred1 {
+        #[key]
+        prev_owner: ContractAddress,
+        #[key]
+        new_owner: ContractAddress,
+    }
+
+    #[storage]
+    struct Storage {
+        owner: ContractAddress,
+    }
+
+    #[constructor]
+    fn constructor(ref self: ContractState, init_owner: ContractAddress) {
+        self.owner.write(init_owner);
+    }
+
+    #[external(v0)]
+    impl OwnableImpl of super::OwnableTrait<ContractState> {
+        fn transfer_ownership(ref self: ContractState, new_owner: ContractAddress) {
+            self.only_owner();
+            let prev_owner = self.owner.read();
+            self.owner.write(new_owner);
+            self.emit(Event::OwnershipTransferred1(OwnershipTransferred1 {
+                prev_owner: prev_owner,
+                new_owner: new_owner,
+            }));
+        }
+
+        fn get_owner(self: @ContractState) -> ContractAddress {
+            self.owner.read()
+        }
+    }
+
+    #[generate_trait]
+    impl PrivateMethods of PrivateMethodsTrait {
+        fn only_owner(self: @ContractState) {
+            let caller = get_caller_address();
+            assert(caller == self.owner.read(), 'Caller is not the owner');
+        }
+    }
+}
+```
+
+Ahora vamos a nuestro [`lib.cairo`](/Workshop/src/lib.cairo) y borramos el ejemplo de fibonacci que viene incluido y añadimos la indicacion de los contratos en módulos que vamos a usar.
+
+```bash
+mod Owner;
+```
+
+### Gestión de Dependencias
+Una vez copiado los pasos anteriores de este Workshop, deberemos guardar todos los cambios en nuestro editor de códido y proceder a modifcar nuestro [`Scarb.toml`](/Workshop/Scarb.toml) en el que le deberemos de añadri la versión del compilador que se va a ejecutar y darnos el código con su Representación Intermedia en Sierra, para que (no nos de el código en vérsión `casm` pura que sería una versión cruda de Cairo), da esta representación de Sierra del y hace que sea más leible y con propiedades de seguridad, este archivo se generraría en `.sierra` pero para hacer la declaración de nuestro contrato necesitaremos que nos genere un `.json`, en cual se generará con las indicaciones del `sierra = true`, asi que nuestro archivo [`Scarb.toml`](/Workshop/Scarb.toml) básico inicial para este ejemplo será:
+
+```bash
+[package]
+name = "Workshop"
+version = "0.1.0"
+
+[dependencies]
+starknet = ">=2.0.1"
+
+[[target.starknet-contract]]
+sierra = true
+```
+
+### Compilación del Contrato
+Ahora procederemos a Compilar nuestro [`Owner.cairo`](/Workshop/src/Owner.cairo). Si ha clonado este repositorio recordamos `git clone ...`, le bastará con correr un comando para que se ejecute la compilación:
+
+```bash
+scarb build
+```
+
+Si todo ha ido bien, se le deberá de crear una carpeta `dev/target` con el archivo `Workshop_Ownable.sierra.json` que necesitaremos más adelante para hacer el `Declare` y el `Deploy`. Si por cualqueir motivo no l egenerá este archivo, purebe a borrar la carpeta `target` y volver a generar el `scarb build`
+
+![Alt text](image-1.png)
 
 
+### Declare
+Una vez tengamos todo preparado realizaremos la declaración del `Owner.cairo`, está declaración nos servirá para establecer una estrucutra que nos sirva para usar en el futuruo y si queremos vilver a usar este contrato, solo usar su mismo `Class Hash` que nos ha dado, y pasar los argumetnos del construcutor que queremos, asi podrimaos tener un `Class hash` de un `ERC-20` standar o con ciertas propiedades, pero cada uno con su owner, nombre, simbolo, total supply o direrentes logicas que s proramaran.
 
+Si nos encontramos en la carptea raiz de nuestro proyecto tenemos dos opciones, o ir directamente a nuestra carpeta `dev` y ejecutar el `declare` con `starkli`:
 
+```bash
+starkli declare --watch Workshop_Ownable.sierra.json
+```
 
+O directamente indicando donde se encuentra nuestro archivo.
 
+```bash
+starkli declare --watch ./target/dev/Workshop_Ownable.sierra.json
+```
 
+Si recibe algun error revise si es por falta de encontrar el archivo, por lo que está indicando mal la ruta, nombre O al abrir una carpeta nueva se olvido de hacer los `export`, o puso su contraseña mal....El resultado que debería de obtener son los datos de Netowr utulizada, Versión del Compile, hash de la tranasación y la cmpilación a Sierra desde Casm la que nos generará un `Class hash` que deberemos guardar para ahora nuesto despliege
 
+![Alt text](image-2.png)
 
+En este ejemplo usaremos `Class hash declared:0x064660ad51db85a7c7c5aa7e2adb0b51c5b86526f02f233368e5e03bb7e702e7`
 
 
 
