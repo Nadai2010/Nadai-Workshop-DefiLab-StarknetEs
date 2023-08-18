@@ -38,16 +38,36 @@
 
 ---
 
-## Temas
+## Temas 
 
-- [Instalación de Cairo](#configuración-de-su-entorno-de-desarrollo-de-starknet)
-    - [Pre-requisitos](#pre-requisitos)
+- [Pre-requisitos](#pre-requisitos)
+ - [Git](#git)
+ - [Curl](#curl)
+- [Instalación de Starkli](#instalación-de-starkli)
+- [Instalación de Scarb](#instalación-de-scarb)
+- [Cuentas y Firmantes](#cuenta-y-firmantes)
+    - [Crear Cuenta ArgentX o Braavos](#crear-cuenta-argentx-o-braavos)
+        - [Conseguir Faucet](#conseguir-faucet)
+        - [Desplegar Contrato de Cuenta](#desplegar-contrato-de-cuenta)
+    - [Crear Cuenta con Starkli](#crear-cuenta-con-starkli)
+    - [Crear Firmante con Starkli](#crear-firmante-con-starkli)
+    - [Crear Descriptores de Cuentas](#crear-descriptores-de-cuentas)
+    - [Configuración de Variables de Entorno](#configuración-de-variables-de-entorno)
+    - [Desplegar Cuenta](#desplegar-cuenta)
+- [Integrando Scarb en tu Flujo de Desarrollo](#integrando-scarb-en-tu-flujo-de-desarrollo)
+    - [Inicialización del Proyecto](#inicialización-del-proyecto)
+    - [Desarrollo del Contrato](#desarrollo-del-contrato)
+    - [Gestión de Dependencias](#gestión-de-dependencias)
+    - [Compilación del Contrato](#compilación-del-contrato)
+- [Declare del Contrato con Starkli](#declare-del-contrato-con-starkli)
+- [Despliegue del Contrato con Starkli](#despligue-del-contrato-con-starkli)
+- [Invocando Contratos con Starkli](#invocando-contratos-con-starkli)
+- [Consulta de datos con Starkli](#consulta-de-datos-con-starkli)
+- [dApp STARK Easy](#dapp-stark-easy)
+- [Comandos Starkli](#comandos-starkli)
 
-
-   
 
 ---
-
 
 ## Pre-requisitos
 Antes de continuar, asegúrese de tener instalados los siguientes pre-requisitos en su sistema:
@@ -65,8 +85,32 @@ Si se produce un error y te solicita entrar como administrador, agrega `sudo` al
 sudo apt-get install git
 ```
 
+### Curl
+El procedimiento para instalar `cURL` en Ubuntu Linux es el siguiente:
 
-## Guía Workshop StarknetEs  
+- Actualiza tu sistema Ubuntu ejecutando: 
+
+```bash
+sudo apt update && sudo apt upgrade
+```
+
+- A continuación, instala cURL ejecutando: 
+
+```bash
+sudo apt install curl
+```
+
+- Verifica la instalación de cURL en Ubuntu ejecutando:
+
+```bash
+curl --version
+```
+
+![Alt text](image-3.png)
+
+---
+## Instalación de Starkli
+Starkli es una interfaz de línea de comandos que te permite interactuar con Starknet. Esta es una de las herramientas que nos permite interactuar con Starknet, sin embargo, no es la única. 
 Starkliup es el instalador del entorno Starkli, y se puede instalar fácilmente utilizando la línea de comando con curl:
 
 ```bash
@@ -96,9 +140,8 @@ starkli --version
 
 Para actualizar a la última versión de Starkli, simplemente siga los pasos anteriores nuevamente.
 
-## Scarb
-
-Para usuarios de macOS y Linux, abra su terminal y ejecute el siguiente comando:
+## Instalación de Scarb
+Scarb es el administrador de paquetes para Cairo. Entre otras cosas, nos permite compilar código Cairo a Sierra, el lenguaje intermedio entre el Cairo de alto nivel y el ensamblador Cairo de bajo nivel (CASM). Para usuarios de macOS y Linux, abra su terminal y ejecute el siguiente comando:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh
@@ -139,16 +182,42 @@ starkli  --version
 
 ![Alt text](assets/image-7.png)
 
-## Cuenta
+Aunque esto ha sido a modo informativo por si desea instlaar una versión concreta, se recomienda instlaar la version estable del primer comando o revisar siempre las compatibilidades de las versiones del compilador [aquí](https://github.com/software-mansion/scarb/releases)
 
-Una billetera inteligente se compone de dos partes: un firmante y un descriptor de cuenta. El firmante es un contrato inteligente que puede firmar transacciones ( necesitamos su clave privada ). El descriptor de cuenta es un archivo json que contiene información sobre la billetera inteligente, como su dirección y clave pública.
+## Cuenta y Firmantes
+Una billetera inteligente se compone de dos partes: `un firmante` y un `descriptor de cuenta`. 
 
-Primero, cree una billetera inteligente a través de las extensiones del navegador Braavos o Argent X. Siga sus instrucciones de billetera ( Argent o Braavos ). Después de crear y financiar su billetera inteligente con ETH ( use el Grifo Starknet Goerli siempre que lo necesite ), puede implementarlo en el testnet de Starknet para este tutorial.
+- El firmante es un contrato inteligente que puede firmar transacciones (necesitamos su clave privada). 
+- El descriptor de cuenta es un archivo `json` que contiene información sobre la billetera inteligente, como su dirección y clave pública.
 
-## Crear un firmante
-Un firmante es un contrato inteligente que puede firmar transacciones. Es un componente crucial de las cuentas en Starknet. Para crear un Signer solo necesitamos la clave privada de nuestra billetera inteligente (, la clave pública se puede derivar de ella ).
+### Crear Cuenta ArgentX o Braavos
+Primero, cree una billetera inteligente siguiendo sus instrucciones de de las extensiones del navegador [Braavos] o [Argent X], aunque también posterior veremos como crear una cuenta desde 0 en Starknet con los Standar del Core y de OZ. 
 
-Starkli nos brinda la capacidad de crear un archivo "keystore" que almacena de forma segura la clave privada de nuestras billeteras inteligentes, cada una con una contraseña. Las cuentas en el archivo de almacén de claves se pueden usar para firmar transacciones usando Starkli. La principal ventaja de este enfoque es que evita almacenar la clave privada como texto sin formato en nuestra computadora. En cambio, utilizamos una contraseña para crear un archivo cifrado en la ubicación que elijamos.
+Después de crear su billetera necesitará financiarla con ETH de prueba, el cual puede conseguir mediante Faucet, usando el Bridge de StarkGate  o transfiriendolos de otra cuenta (ejemplo creación para mainnet), pero para implementarlo en este tutorial usaremos la testnet de Starknet.
+
+### Conseguir Faucet
+Hay varios link que dejaremos a coinuación aunque algunis pueden estar rotos, recoemdnamos por orden de lista aunque no se aseguran que esten activos todos.
+
+-
+-
+-
+-
+
+### Desplegar Contrato de Cuenta
+La forma más sencilla es dentro de cada billetera una vez recibido los fondos, es darle a desplegar nuestro Contrato de Cuenta, que después podremos añadir en Starkli para interactuar con Starknet y nuestro Contratos de Cairo.
+
+Tenemos 2 Opciones para crear nuestra cuenta, la Opción A que configuraremos nuestro desarrollo con las lógicas de Argent y Braavos, u Opción B el crear desde 0 a modo de aprendizaje todo el proceso desde el generador de las private key y public key.
+
+---
+## Crear Cuenta con Starkli (Opción A)
+Podremos crear nuestro contrato de cuenta desde los comandos de la CLI de Starknet, con la herramienta de Starkli podremos gestionar todos estos comandos y ajustes de una forma más sencilla. Los Contratos de Cuentas creados desde Starknet, son unos standard creados por el Core y Oppen Zeppelin que también podremos utlizar, como también podremos añadir los creados por Braavos o ArgentX, además queda en cada desarrolador el escoger o crear su propia lógica de contrato de Cuenta para ofrecer diversidad a los usuarios.
+
+En este caso veremos ambos metodos, tanto crear todo desde 0 como el añadir las creadas en las billeteras inteligentes pero primero deberemos configurar el firmante.
+
+## Crear Firmante con Starkli
+Un firmante es un contrato inteligente que puede firmar transacciones. Es un componente crucial de las cuentas en Starknet. Para crear un Signer solo necesitamos la clave privada de nuestra billetera inteligente (la clave pública se puede derivar de ella ).
+
+Starkli nos brinda la capacidad de crear un archivo `keystore` que almacena de forma segura la clave privada de nuestras billeteras inteligentes, cada una con una contraseña. Las cuentas en el archivo de almacén de claves se pueden usar para firmar transacciones usando Starkli. La principal ventaja de este enfoque es que evita almacenar la clave privada como texto sin formato en nuestra computadora. En cambio, utilizamos una contraseña para crear un archivo cifrado en la ubicación que elijamos.
 
 Normalmente, el archivo de almacén de claves se almacena en la ubicación predeterminada de la CLI de Starkli. El siguiente comando crea un archivo de almacén de claves para nuestra billetera inteligente en la ubicación predeterminada en
 
@@ -163,33 +232,40 @@ y luego
 mkdir ~/.starkli-wallets/deployer
 ```
 
-Ahora podremos crear nuestro nueva cuenta y firmante o directamente exportar una pk y añadir una directamnte, en este caso hemos copiado la pk de una cuenta de braavos y vamos a usarla, le hemos dado el nombre de `Nadai_Signer.json` a esta cuenta, l acual vamos añadir la private key de la ceunta de ArgentX ode Braavos, en este caso usamos Braavos.
+Ahora podremos crear nuestro nueva cuenta y firmante o directamente exportar una pk y añadirla.
+
+- Para Argent X: puede encontrarlo en la sección "Configuración" → Seleccione su cuenta → "Exportar clave privada". 
+- Para Braavos: puede encontrarlo en la sección "Configuración" → "Privacidad y seguridad" → "Export Private Key".
+
+En este caso hemos copiado la `Private Key` de una cuenta de Braavos y vamos a usarla, le hemos dado el nombre de `Braavos_Signer.json` a esta este firmante, en el cual vamos añadir la private key de la cuenta de ArgentX o de Braavos que haya escogido, como vimos en este caso usamremos Braavos.
 
 ![Alt text](assets/image-8.png) ![Alt text](assets/image-9.png)
 
 ```bash
-starkli signer keystore from-key ~/.starkli-wallets/deployer/Nadai_Signer.json
+starkli signer keystore from-key ~/.starkli-wallets/deployer/Braavos_Signer.json
 ```
 
-Aqui el  texto por seguiridad no se visualizaará asi que pegue u pf luego revise si desea añadir un contraseña o no, y añadala, si todo ha ido bien le deberá aperecer su clave pública debajo del archivo encriptado que cabamos de crear
+A continuación le solicitará el texto para añadir el indicador de clave privada, por seguiridad no se visualizaará, asi que pegue su `private key` luego revise si desea añadir un contraseña o no, y añadala, Necesitará esta contraseña para firmar transacciones con Starkli. si todo ha ido bien le deberá aperecer su clave pública que encotraba en el apartado de su private Key, debajo del archivo encriptado que acabamos de crear.
 
-![Alt text](assets/image-10.png)
+![Alt text](image-7.png)
 
+Con esta parte tendremos nuestro signer configurado, nos faltará definir como usaremos nuestro Contrato de Cuenta.
 
-En el indicador de clave privada, pegue la clave privada de su billetera inteligente. En el mensaje de contraseña, ingrese una contraseña de su elección. Necesitará esta contraseña para firmar transacciones con Starkli.
-
-Exporte la llave privada de su billetera Braavos o Argent. Para Argent X, puede encontrarlo en la sección "Configuración" → Seleccione su cuenta → "Exportar clave privada". Para Braavos, puede encontrarlo en la sección "Configuración" → "Privacidad y seguridad" → "Export Private Key".
-
-Si bien es necesario conocer la clave privada de una billetera inteligente para firmar transacciones, no es suficiente. También debemos informar a Starkli sobre el mecanismo de firma empleado por nuestra billetera inteligente creada por Braavos o Argent X. ¿Usa una curva elíptica? En caso afirmativo, ¿cuál? Esta es la razón por la que necesitamos un archivo descriptor de cuenta.
-
-## Crear un descriptor de cuenta
-Starkli ofrece un comando para recopilar toda la información requerida de una billetera inteligente al proporcionar su dirección en cadena. Con estos datos, el CLI genera un archivo json que se puede usar para firmar transacciones.
+## Crear Descriptores de Cuentas
+Starkli ofrece un comando para recopilar toda la información requerida de una billetera inteligente al proporcionar su dirección en cadena. Con estos datos, el CLI genera un archivo `json` que se puede usar para firmar transacciones.
 
 ```bash
-touch ~/.starkli-wallets/deployer/Nadai_Account.json
+touch ~/.starkli-wallets/deployer/Braavos_Account.json
 ```
 
-El descripotr de la cuenta deberá de tener la siguiente estrucutra, que debermo s de ir rellenando:
+![Alt text](image-8.png)
+
+Para encontrar este archivo debera de ir a la ruta oculta que añadimos antes ` ~/.starkli-wallets/deployer`,  normamlente estará oculto así que revise su configuración pero en Ubuntu y Linux suele ser `crtl + h` para encontrar los ocultos y poder acceder a esa ubicación donde estará los `signer` y las `account`.
+
+![Alt text](image-9.png)
+
+Si bien es necesario conocer la clave privada de una billetera inteligente para firmar transacciones, no es suficiente. También debemos informar a Starkli sobre el mecanismo de firma empleado por nuestra billetera inteligente creada por Braavos o Argent X. ¿Usa una curva elíptica? En caso afirmativo, ¿cuál? Esta es la razón por la que necesitamos un archivo descriptor de cuenta.
+El descripotr de la cuenta deberá de tener la siguiente estrucutra, que debermo s de ir rellenando si aun no sale con los datos, podra hacerlo desde cualqueri editor de código si fuera necesario;
 
 ```bash
 {
@@ -207,10 +283,10 @@ El descripotr de la cuenta deberá de tener la siguiente estrucutra, que debermo
 }
 ```
 
-La clave pública fue devuelta por el comando `starkli signer keystore from-key ~/.starkli-wallets/deployer/Nadai_Signer.json` Sin embargo, también puede encontrarlo usando el siguiente comando y escribiendo la contraseña que utilizó para crear el archivo keystore:
+La clave pública fue devuelta por el comando `starkli signer keystore from-key ~/.starkli-wallets/deployer/Braavos_Signer.json` Sin embargo, también puede encontrarlo usando el siguiente comando y escribiendo la contraseña que utilizó para crear el archivo keystore:
 
 ```bash
-starkli signer keystore inspect ~/.starkli-wallets/deployer/Nadai_Signer.json
+starkli signer keystore inspect ~/.starkli-wallets/deployer/Braavos_Signer.json
 ```
 
 ![Alt text](assets/image-12.png)
@@ -222,6 +298,7 @@ starkli class-hash-at 0x027f68d0d0f474b1a25f359a42dc49a3003a3522d71765a5e7658e68
 ```
 
 ![Alt text](assets/image-13.png)
+
 
 Aquí un ejemplo de como debería quedar con los datos completos:
 
@@ -245,19 +322,83 @@ Quizás se pregunte por qué el tipo se define como `open_zeppelin` a pesar de q
 
 **Sin embargo, tenga en cuenta que una billetera inteligente Braavos con un firmante de hardware habilitado no funcionará en este contexto, ya que un firmante de hardware utiliza una curva elíptica diferente para firmar transacciones.**
 
+
+
 ## Configuración de variables de entorno
 Para la mayoría de los indicadores de los diferentes comandos disponibles en Starkli, podemos definir variables de entorno para que los comandos sean más cortos y fáciles de administrar.
 
 Hay dos variables de entorno primario que son vitales para el uso efectivo de la CLI de Starkli. Esta es la ubicación del archivo de la tienda de claves para el firmante y la ubicación del archivo del descriptor de cuenta.
 
 ```bash
-export STARKNET_ACCOUNT=~/.starkli-wallets/deployer/Nadai_Account.json
-export STARKNET_KEYSTORE=~/.starkli-wallets/deployer/Nadai_Signer.json
+export STARKNET_ACCOUNT=~/.starkli-wallets/deployer/Braavos_Account.json
+export STARKNET_KEYSTORE=~/.starkli-wallets/deployer/Braavos_Signer.json
 ```
 
-![Alt text](assets/image-11.png)
+![Alt text](image-10.png)
 
-Con esto ya tendriamos lista nuestra Cuenta y Firmante para interactuar en Starknet a través de los comandos con Starkli,así que iremo sa preparar nuestro contrato para hacer el declare y el despliegue desde Scarb.
+Con esto ya tendriamos lista nuestra Cuenta y Firmante para interactuar en Starknet a través de los comandos con Starkli, así que iremos a preparar nuestro contrato para hacer el compile desde Scarb y el Declare y Deploy con Starkli, pero primero dejamos la Opción B, 
+
+### Crear Cuenta con Starkli (Opción B)
+Para crear una keystore de claves desde cero podemos usar la ubicación que destinamos antes para ello `~/.starkli-wallets/deployer` y en este caso le daremos el nombre de `Signer_Workshop.json`.
+
+Te pedirá un Password que también podrá dejar vacio, recordar que no saldrá el texto que escriba por seguridad
+
+```bash
+starkli signer keystore new ~/.starkli-wallets/deployer/Signer_Workshop.json
+```
+
+![Alt text](image-4.png)
+
+Bien, ahora nos deberá de haber dado una public key, esta ha sido nueva creada y deberemos exportar el `STARKNET_KEYSTORE` para que coincidan la public key del Signer que hemos creado cifrado
+
+```bash
+export STARKNET_KEYSTORE=~/.starkli-wallets/deployer/Signer_Workshop.json
+```
+
+Ahora crearemos la cuenta que estará controlada y cifrada por el archivo que hemos creado, ademas de ver luego como se pueden alñadir diversos firmantes, pero ahora nos centraremos en crear nuestra `Account_Workshop.json`
+
+```bash
+starkli account oz init ~/.starkli-wallets/deployer/Account_Workshop.json
+```
+
+![Alt text](image-11.png)
+
+
+Si entramos en la ubicación donde estamos creando el Keysotre y la Account, recuerde que normamlente está oculto, revise su configuración pero en Ubuntu y Linux suele ser `crtl + h` aquí podrá revisar como es la estructura del archivo que se ha creado, el estado de `undeployed` ya qiue solo hemjos calcualdo y generado el Contrato de Cuenta, y veremos como coincide la pública, pero aún falta enviar saldo en este caso a `0x009f47ebc2b3062b99e52f3b20b7bce93c6adc19911500cf569ac502fef90f6e` para que pueda desplegarse.
+
+
+![Alt text](image-12.png)
+
+Una vez haya enviado los fondos o solicitado desde el Faucet, procederemos al despliegue, primero nos aseguramos de haber exportado tanto el `KEYSTORE` y ejecutamos el comando siguiente apuntando a la ubicación y archivo de la Cuenta, también nos saldrá el Starkli para un cómodo despliegue.
+
+```bash
+export STARKNET_KEYSTORE=~/.starkli-wallets/deployer/Signer_Workshop.json
+```
+
+Y posterior procederemos al despligue, nos saldra nuesto pasword del firmante y una adevertenica de si ha enviado fondos a esa dirección.
+
+```bash
+starkli account deploy /home/nadai/.starkli-wallets/deployer/Account_Workshop.json
+```
+
+![Alt text](image-13.png)
+
+Con esto ya tendriamos lista nuestra Cuenta desplegada, fondeada y Firmante para interactuar en Starknet a través de los comandos con Starkli, podemos comprobar en nuestro archivo como el estado ha pasado ha `deployed` y ahora nos ha dado el `address` que coincidriá con una posible variciaón de algun 0 inicial con respecto ala que enviamos fondos. Con todo listo podemos ire a preparar nuestro contrato para hacer el compile desde Scarb y el Declare y Deploy con Starkli, pero primero dejamos un anexo con una parte para generar el Key-par.
+
+## Generador Key-par
+Otra opción que podemos usar es generar un par de claves uan privada y una publica desde el generator key-par, este método solo se recomienda como métodos ilustrativos, siendo los anteriores los que aconsejmaos. Primero deberemos pasar el comando que generara nuestro key-par:
+
+```bash
+starkli signer gen-keypair
+```
+
+![Alt text](image-6.png)
+
+Recordar que estas claves privadas no se deben nunca compartir, esta cuenta ha sido creado desde 0 como ha visto pero este workshop. Ahora deberemos configurar nuestro `Signer`, para ellos podemos repetir los pasos del opción A desde `starkli signer keystore from-key ~/.starkli-wallets/deployer/Braavos_Signer.json` pero esta vez no puede darle el mismo nombre, desde aquí podra añadir la `private Key` generada antes y seguir los mismo procesos previos.
+
+Una vez configurado todo hasat nuestras variables de entorno, pasamos a Crear nuestro contrato de `Owner.cairo` usando Scarb.
+
+---
 
 ## Integrando Scarb en tu Flujo de Desarrollo 
 
@@ -385,8 +526,8 @@ Si todo ha ido bien, se le deberá de crear una carpeta `dev/target` con el arch
 ![Alt text](image-1.png)
 
 
-### Declare
-Una vez tengamos todo preparado realizaremos la declaración del `Owner.cairo`, está declaración nos servirá para establecer una estrucutra que nos sirva para usar en el futuruo y si queremos vilver a usar este contrato, solo usar su mismo `Class Hash` que nos ha dado, y pasar los argumetnos del construcutor que queremos, asi podrimaos tener un `Class hash` de un `ERC-20` standar o con ciertas propiedades, pero cada uno con su owner, nombre, simbolo, total supply o direrentes logicas que s proramaran.
+## Declare del Contrato con Starkli
+Una vez tengamos todo preparado realizaremos la declaración del `Owner.cairo`, está declaración nos servirá para establecer una estrucutra que nos sirva para usar en el futuruo y si queremos volver a usar este contrato, solo usar su mismo `Class Hash` que nos ha dado, y pasar los argumetnos del construcutor que queremos, asi podrimaos tener un `Class hash` de un `ERC-20` standar o con ciertas propiedades, pero cada uno con su owner, nombre, simbolo, total supply o direrentes logicas que s proramaran.
 
 Si nos encontramos en la carptea raiz de nuestro proyecto tenemos dos opciones, o ir directamente a nuestra carpeta `dev` y ejecutar el `declare` con `starkli`:
 
@@ -407,8 +548,41 @@ Si recibe algun error revise si es por falta de encontrar el archivo, por lo que
 En este ejemplo usaremos `Class hash declared:0x064660ad51db85a7c7c5aa7e2adb0b51c5b86526f02f233368e5e03bb7e702e7`
 
 
+## Despligue del Contrato con Starkli
+Ahora que ya tenemos Declarado nuestro contrato siemroe y cuando no lo hubiera sido antes y sea único, sino podrá omitir la declaración y hacer directamnte el despliegue, para ello debreemos de mirar que argumentos se le pasa al contructor del contato, en este caso vemos como pide la dirección del contrato que sera el `owner` así que en este caso añadire la creada para la prueba y fondeada para el workshop `0x009f47ebc2b3062b99e52f3b20b7bce93c6adc19911500cf569ac502fef90f6e`.
 
+```rust
+    #[constructor]
+    fn constructor(ref self: ContractState, init_owner: ContractAddress) {
+        self.owner.write(init_owner);
+    }
+```
 
+Y siempre revisar que los `EXPORT` esten realizado para interactuar con la red de Starkent, asi que pasemos los siguientes comando y añadiendo el argumetno requerido de la sigueitn manera:
+
+```bash
+export STARKNET_KEYSTORE=~/.starkli-wallets/deployer/Signer_Workshop.json
+export STARKNET_ACCOUNT=~/.starkli-wallets/deployer/Account_Workshop.json
+```
+
+```bash
+starkli deploy --watch 0x064660ad51db85a7c7c5aa7e2adb0b51c5b86526f02f233368e5e03bb7e702e7 0x009f47ebc2b3062b99e52f3b20b7bce93c6adc19911500cf569ac502fef90f6e
+```
+
+![Alt text](image-14.png)
+
+Puede consultar el [Link del Contrato del Owner] para consultar que todo esté correcto, auqnue con Starkli podemos directamente hacer llamadas al contrato para revisar que esté todo correcto.
+## Invocando Contratos con Starkli
+Desde Starklipodemos cambiar el estado de un contrato, relaizar operaciones o hacer consultas a datos y estaso de la blockchain, asi que comprobemos si nuestro contrato de owner tiene como dueño la dirección del contrato de cuenta que añadimos, para ello deberemos hacer una `call` e indicar que función vamos a llamar, lo bueno de Starknet son los selectores y en este caso llamaremos a `get_owner` del contrato para que nos de quien es el dueño.
+
+```bash
+starkli call 0x028491f9e3d8b0005a649e08833330de371b5e227be05a0e0575f247df8691a5 get_owner
+```
+
+![Alt text](image-15.png)
+## Consulta de datos con Starkli
+
+## dApp STARK Easy
 ## Comandos Starkli
 
 starkli class-hash Hola.json
