@@ -385,7 +385,7 @@ La dirección es la dirección de su billetera inteligente, que puede encontrar 
 starkli class-hash-at 0x027f68d0d0f474b1a25f359a42dc49a3003a3522d71765a5e7658e68520d7826
 ```
 
-![Alt text](assets/imageassets/-13.png)
+![Alt text](assets/image-13.png)
 
 Aquí hay un ejemplo de cómo debería verse el descriptor con los datos completos:
 
