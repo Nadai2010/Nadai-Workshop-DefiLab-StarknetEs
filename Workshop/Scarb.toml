@@ -1,9 +1,13 @@
 [package]
 name = "Workshop"
-version = "0.1.0"
+version = "1.0.0"
+cairo-version = "2.2.0"
+authors = ["Nadai <nadai2010@proton.me>"]
+description = "Workshop aprendiendo a programar con Cairo en Starknet usando Scarb, Starkli"
+repository = "https://github.com/Nadai2010/Nadai-Workshop-DefiLab-StarknetEs"
 
 [dependencies]
-starknet = ">=2.0.1"
+starknet = ">=2.2.0"
 
 [[target.starknet-contract]]
 sierra = true
