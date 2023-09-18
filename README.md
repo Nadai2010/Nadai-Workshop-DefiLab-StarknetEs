@@ -270,7 +270,7 @@ Aquí hay varios enlaces y métodos que le proporcionaremos para que pueda despl
 
 ---
 
-### Configuración de Variables de Entorno
+### Configuración de Variables de Entorno A
 Una vez haya enviado los fondos o solicitado desde el Faucet, procederemos al despliegue. Primero, asegurémonos de haber exportado tanto el `KEYSTORE` como la variable `ACCOUNT`, y luego ejecutaremos el siguiente comando, apuntando a la ubicación y archivo de la cuenta:
 
 ```bash
@@ -347,7 +347,7 @@ En nuestro caso, al ejecutar el comando anterior con los datos de nuestra cuenta
 starkli account fetch 0x027f68d0d0f474b1a25f359a42dc49a3003a3522d71765a5e7658e68520d7826 --output ~/.starkli-wallets/deployer/Braavos_Account.json
 ```
 
-![Alt text](image-29.png)
+![Alt text](assets/image-29.png)
 
 Recuerde que para encontrar este archivo, deberá ir a la ruta oculta que mencionamos anteriormente: `~/.starkli-wallets/deployer`. Estos archivos suelen estar ocultos, así que revise su configuración. En Ubuntu y Linux, puede mostrar archivos ocultos con la combinación de teclas `ctrl + h`.
 
@@ -377,7 +377,7 @@ La clave pública se obtuvo mediante el comando `starkli signer keystore from-ke
 starkli signer keystore inspect ~/.starkli-wallets/deployer/Braavos_Signer.json
 ```
 
-![Alt text](image-12.png)
+![Alt text](assets/image-12.png)
 
 La dirección es la dirección de su billetera inteligente, que puede encontrar en las extensiones del navegador Braavos o Argent X. Luego, use esta dirección para buscar el **hash de clase (class hash)** de su billetera inteligente. Además, necesitará el **hash de la implementación (implementation hash)**, que se encuentra en el explorador al agregar su dirección y ver la sección `Overview`(Resumen), donde encontrará la `Deployed At Transaction Hash` (Hash de transacción de implementación). Aunque puede obtener el **class hash** con el siguiente comando Starkli:
 
@@ -385,7 +385,7 @@ La dirección es la dirección de su billetera inteligente, que puede encontrar 
 starkli class-hash-at 0x027f68d0d0f474b1a25f359a42dc49a3003a3522d71765a5e7658e68520d7826
 ```
 
-![Alt text](image-13.png)
+![Alt text](assets/imageassets/-13.png)
 
 Aquí hay un ejemplo de cómo debería verse el descriptor con los datos completos:
 
