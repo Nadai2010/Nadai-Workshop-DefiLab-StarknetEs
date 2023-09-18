@@ -1,5 +1,5 @@
 <div align="center">
-<img alt="starknet logo" src="" width="600" >
+<img alt="starknet logo" src="https://github.com/Nadai2010/Nadai-Workshop-DefiLab-StarknetEs/blob/main/assets/Portada.png" width="600" >
   <h1 style="font-size: larger;">
     <img src="https://github.com/Nadai2010/Nadai-SHARP-Starknet/blob/master/im%C3%A1genes/Starknet.png" width="40">
     <strong> Workshop Starknet - Defilab & Escuela Crypto </strong> 
@@ -28,6 +28,7 @@
 
 </div>
 
+![Alt text](image.png)
 ## Recursos oficiales
 
 - [Starknet Doc](https://docs.starknet.io/documentation/) - Documentos oficiales de Starknet
