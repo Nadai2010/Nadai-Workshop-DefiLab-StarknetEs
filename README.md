@@ -2,7 +2,7 @@
 <img alt="starknet logo" src="https://github.com/Nadai2010/Nadai-Workshop-DefiLab-StarknetEs/blob/main/assets/Portada.png" width="800" >
   <h1 style="font-size: larger;">
     <img src="https://github.com/Nadai2010/Nadai-SHARP-Starknet/blob/master/im%C3%A1genes/Starknet.png" width="40">
-    <strong> Workshop Starknet - Defilab & EscuelaCryptoES </strong> 
+    <strong> Workshop Starknet-Defilab & EscuelaCryptoES </strong> 
     <img src="https://github.com/Nadai2010/Nadai-SHARP-Starknet/blob/master/im%C3%A1genes/Starknet.png" width="40">
   </h1>
 
