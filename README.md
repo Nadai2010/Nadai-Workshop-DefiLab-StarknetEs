@@ -66,6 +66,7 @@
 - [Despliegue del Contrato con Starkli](#despligue-del-contrato-con-starkli)
 - [Invocando Contratos con Starkli](#invocando-contratos-con-starkli)
 - [Consulta de datos con Starkli](#consulta-de-datos-con-starkli)
+- [Gestión de Dependencias Externas en Scarb](#gestión-de-dependencias-externas-en-scarb)
 - [dApp STARK Easy](#dapp-stark-easy)
 - [Comandos Starkli](#comandos-starkli)
 
@@ -566,6 +567,8 @@ A continuación, vamos a nuestro archivo [`lib.cairo`](/Workshop/src/lib.cairo),
 mod Owner;
 ```
 
+---
+
 ### Gestión de Dependencias
 Una vez hayas copiado los pasos anteriores de este taller, deberás guardar todos los cambios en tu editor de código y proceder a modificar tu archivo `Scarb.toml`. En la sección `[dependencies]`, podrás añadir dependencias externas como por ejemplo las de OpenZeppelin u otras que necesites. Además, asegúrate de que en la sección `[[target.starknet-contract]]` de tu archivo `Scarb.toml` especifiques `sierra = true` para que la compilación genere el código en la representación intermedia de Sierra en formato `.json`.
 
@@ -584,6 +587,8 @@ starknet = ">=2.2.0"
 [[target.starknet-contract]]
 sierra = true
 ```
+
+---
 
 ### Extensión Cairo VS Code 
 Para trabajar con la sintaxis de Cairo de manera efectiva y detectar automáticamente la versión del compilador, así como facilitar la corrección de errores, es altamente recomendable utilizar la extensión `Cairo 1` en VS Code. Siga estos pasos para configurarla:
@@ -617,6 +622,7 @@ Si todo ha ido bien, se le deberá de crear una carpeta `dev/target` con el arch
 
 ![Alt text](assets/image-18.png)
 
+---
 
 ## Declare del Contrato con Starkli
 Una vez tengamos todo preparado realizaremos la declaración del `Owner.cairo`, está declaración nos servirá para establecer una estrucutra que nos sirva para usar en el futuruo y si queremos volver a usar este contrato, solo usar su mismo `Class Hash` que nos ha dado, y pasar los argumetnos del construcutor que queremos, asi podrimaos tener un `Class hash` de un `ERC-20` standar o con ciertas propiedades, pero cada uno con su owner, nombre, simbolo, total supply o direrentes logicas que s proramaran.
@@ -639,6 +645,7 @@ Si recibe algun error revise si es por falta de encontrar el archivo, por lo que
 
 En este ejemplo usaremos `Class hash declared:0x064660ad51db85a7c7c5aa7e2adb0b51c5b86526f02f233368e5e03bb7e702e7`
 
+---
 
 ## Despligue del Contrato con Starkli
 Ahora que ya tenemos Declarado nuestro contrato siemroe y cuando no lo hubiera sido antes y sea único, sino podrá omitir la declaración y hacer directamnte el despliegue, para ello debreemos de mirar que argumentos se le pasa al contructor del contato, en este caso vemos como pide la dirección del contrato que sera el `owner` así que en este caso añadire la creada para la prueba y fondeada para el workshop `0x009f47ebc2b3062b99e52f3b20b7bce93c6adc19911500cf569ac502fef90f6e`.
@@ -664,6 +671,9 @@ starkli deploy --watch 0x064660ad51db85a7c7c5aa7e2adb0b51c5b86526f02f233368e5e03
 ![Alt text](assets/image-20.png)
 
 Puede consultar el [Link del Contrato del Owner](https://testnet.starkscan.co/contract/0x028491f9e3d8b0005a649e08833330de371b5e227be05a0e0575f247df8691a5#read-write-contract) para consultar que todo esté correcto, aunque con Starkli podemos directamente hacer llamadas al contrato para revisar que esté todo bien.
+
+---
+
 ## Invocando Contratos con Starkli
 Desde Starkli podemos cambiar el estado de un contrato, realizar operaciones o hacer consultas a datos y estados de la blockchain, asi que comprobemos si nuestro contrato de owner tiene como dueño la dirección del contrato de cuenta que añadimos, para ello deberemos hacer una `call` e indicar que función vamos a llamar, lo bueno de Starknet son los selectores y en este caso llamaremos a `get_owner` del contrato para que nos de quien es el dueño.
 
@@ -674,6 +684,21 @@ starkli call 0x028491f9e3d8b0005a649e08833330de371b5e227be05a0e0575f247df8691a5 
 ![Alt text](assets/image-21.png)
 
 ## Consulta de datos con Starkli
+
+## Gestión de Dependencias Externas en Scarb
+En Scarb, puedes añadir y gestionar las dependencias desde el archivo `Scarb.toml`. Añadir una dependencia es fácil y se puede hacer de varias maneras, una de ellas es utilizando el comando `scarb add`, que admite una variedad de parámetros para expresar tus dependencias. También puede mantener automáticamente la lista de dependencias ordenada, si no lo está. A continuación, se muestra un ejemplo de cómo agregar una dependencia, como alexandria_math:
+
+```shell
+scarb add alexandria_math --git https://github.com/keep-starknet-strange/alexandria.git --rev 27fbf5b
+```
+
+Para eliminar una dependencia, simplemente debes eliminar las líneas relacionadas en tu archivo Scarb.toml. Como atajo rápido, puedes utilizar el comando `scarb remove`, también conocido como `scarb rm`, que limpiará automáticamente el manifiesto de dependencias, debes indicar cual quieres eliminar como se muestra aquí:
+
+```shell
+scarb rm alexandria_math
+```
+
+Con estas herramientas, puedes gestionar tus dependencias de manera eficiente en Scarb y mantener tu proyecto organizado.
 
 ## dApp STARK Easy
 ## Comandos Starkli

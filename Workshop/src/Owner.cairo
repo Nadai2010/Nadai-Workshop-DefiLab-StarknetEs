@@ -10,7 +10,7 @@ trait OwnableTrait<T> {
 mod Ownable {
     use super::ContractAddress;
     use starknet::get_caller_address;
-
+    
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
