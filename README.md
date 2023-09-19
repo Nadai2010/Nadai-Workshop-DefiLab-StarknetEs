@@ -60,6 +60,7 @@
     - [Inicialización del Proyecto](#inicialización-del-proyecto)
     - [Desarrollo del Contrato](#desarrollo-del-contrato)
     - [Gestión de Dependencias](#gestión-de-dependencias)
+    - [Extensión Cairo VS Code](#extensión-cairo-vs-code)
     - [Compilación del Contrato](#compilación-del-contrato)
 - [Declare del Contrato con Starkli](#declare-del-contrato-con-starkli)
 - [Despliegue del Contrato con Starkli](#despligue-del-contrato-con-starkli)
@@ -578,12 +579,33 @@ name = "Workshop"
 version = "0.1.0"
 
 [dependencies]
-starknet = ">=2.0.1"
+starknet = ">=2.2.0"
 
 [[target.starknet-contract]]
 sierra = true
 ```
 
+### Extensión Cairo VS Code 
+Para trabajar con la sintaxis de Cairo de manera efectiva y detectar automáticamente la versión del compilador, así como facilitar la corrección de errores, es altamente recomendable utilizar la extensión `Cairo 1` en VS Code. Siga estos pasos para configurarla:
+
+1. Abra Visual Studio Code.
+
+2. Diríjase a la sección de extensiones. Puede hacerlo haciendo clic en el ícono de `Extensiones` en la barra lateral izquierda o presionando `Ctrl + Shift + X`.
+
+3. En la barra de búsqueda de extensiones, escriba `Cairo 1`.
+
+4. Aparecerá la extensión `Cairo 1`. Haga clic en `Instalar` para descargarla e instalarla en su entorno de VS Code.
+
+5. Una vez que la extensión esté instalada, podrá detectar automáticamente la versión del compilador Cairo a partir del archivo de manifiesto de su proyecto `Scarb`. Asegúrese de tener `Scarb` instalado correctamente. También puede configurar su activación desde los ajustes revisando el estado activo de las casillas `Cairo1: Enable Scarb`, o en caso de que siga teniendo problemas después de reiniciar, añadir las rutas del paquete binario de Scarb en `Cairo1: Scarb Path`.
+
+
+![Alt text](assets/image-30.png)
+
+Esto facilita la corrección de errores y asegura que su código se ajuste a la versión específica del compilador.
+
+Con la extensión `Cairo 1` configurada en su entorno de Visual Studio Code, estará listo para trabajar de manera eficiente con la sintaxis de Cairo y aprovechará las funciones de detección de errores y corrección automática proporcionadas por la extensión. Esto es especialmente útil para desarrollar aplicaciones en Cairo de manera más efectiva y sin problemas.
+
+---
 ### Compilación del Contrato
 Ahora procederemos a Compilar nuestro [`Owner.cairo`](/Workshop/src/Owner.cairo). Si ha clonado este repositorio recordamos `git clone ...`, le bastará con correr un comando para que se ejecute la compilación:
 
