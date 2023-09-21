@@ -67,8 +67,8 @@
 - [Invocando Contratos con Starkli](#invocando-contratos-con-starkli)
 - [Consulta de datos con Starkli](#consulta-de-datos-con-starkli)
 - [Gestión de Dependencias Externas en Scarb](#gestión-de-dependencias-externas-en-scarb)
-- [dApp STARK Easy](#dapp-stark-easy)
 - [Comandos Starkli](#comandos-starkli)
+- [dApp STARK Easy](#dapp-stark-easy)
 
 
 ---
@@ -678,15 +678,6 @@ Puedes consultar el [enlace del contrato del "Owner"](https://testnet.starkscan.
 
 ---
 
-### Invocando Contratos con Starkli
-Desde Starkli, puedes cambiar el estado de un contrato, realizar operaciones o hacer consultas a datos y estados de la blockchain. Así que comprobemos si nuestro contrato de `Owner.cairo` tiene la dirección del contrato de la cuenta que hemos añadido. Para ello, debemos realizar una `call` e indicar qué función queremos invocar. Lo bueno de Starknet son los selectores, y en este caso, llamaremos a la función `get_owner` del contrato para obtener información sobre quién es el propietario.
-
-```bash
-starkli call 0x028491f9e3d8b0005a649e08833330de371b5e227be05a0e0575f247df8691a5 get_owner
-```
-
-![Alt text](assets/image-21.png)
-
 ---
 ## Consulta de datos con Starkli
 
@@ -705,95 +696,73 @@ scarb rm alexandria_math
 
 Con estas herramientas, puedes gestionar tus dependencias de manera eficiente en Scarb y mantener tu proyecto organizado.
 
-## dApp STARK Easy
+---
 ## Comandos Starkli
+### Class Hash
+Puede conseguir el `class hash` para hacer el `declare` con el comando de starkli un a vez haya compilado su código de cairo, aquí algunos ejemplos
 
-starkli class-hash Hola.json
+```bash
+starkli class-hash ./target/dev/Workshop_Erc20.sierra.json
+```
 
-![Alt text](assets/image-3.png)
+![Alt text](assets/image-31.png)
 
-starkli declare --watch Hola.json
+```bash
+starkli class-hash ./target/dev/Workshop_ERC20.sierra.json
+```
 
-![Alt text](image-4.png)
+![Alt text](assets/image-32.png)
 
-starkli deploy --watch 0x0274ef190c2dc9c9660e5357e8318e33e7b9240fb1c6e4086d0a540b41beeea8
+También podrá conseguir el `class hash` desde un contrato que ya haya sido desplegado pasandole como argumento la dirección del contrato
 
-![Alt text](image-5.png)
+```bash
+starkli class-hash-at 0x028491f9e3d8b0005a649e08833330de371b5e227be05a0e0575f247df8691a5
+```
+![Alt text](assets/image-33.png)
 
-starkli invoke --watch 0x04f00ae43a70c9978c4688621daf599c8b5d102b63d075298b5ce033dc4bff8d Hola_Starknianos_Dice 1921882746024867290215520585294889529299439584169484315753
+---
 
-![Alt text](image-6.png)
+### Call
+Desde Starkli, puedes cambiar el estado de un contrato, realizar operaciones o hacer consultas a datos y estados de la blockchain. Así que comprobemos si nuestro contrato de `Owner.cairo` tiene la dirección del contrato de la cuenta que hemos añadido. Para ello, debemos realizar una `call` e indicar qué función queremos invocar. Lo bueno de Starknet son los selectores, y en este caso, llamaremos a la función `get_owner` del contrato para obtener información sobre quién es el propietario, en este caso sólo es una `call` que no modifica el estado.
 
-![Alt text](image-7.png)
+```bash
+starkli call 0x028491f9e3d8b0005a649e08833330de371b5e227be05a0e0575f247df8691a5 get_owner
+```
 
-starkli selector Hola_Starknianos_Dice
+![Alt text](assets/image-21.png)
 
-![Alt text](image-8.png)
+---
+### Invoke
+Desde Starkli, tienes la capacidad de llevar a cabo una invocación `invoke`. Esta característica te permite realizar operaciones que tienen el potencial de modificar el estado de un contrato en la blockchain. Para ejecutar un `invoke`, debes proporcionar ciertos parámetros clave, como la `dirección del contrato` que deseas modificar y la función específica que deseas ejecutar en ese contrato, en este ejemplo, `transfer_ownership`. Además, es necesario indicar los argumentos necesarios para la función que estás invocando, como la nueva dirección `0x027f68d0d0f474b1a25f359a42dc49a3003a3522d71765a5e7658e68520d7826`. Esta acción podría resultar en una transferencia de propiedad en el contrato, lo que modificaría su estado interno.
 
-starkli call 0x018561e9475a9248f0580e3274fb8a027b33850dbd2e53f2d6acb9c14fcd0599 tokenURI \view_with_args\1
+```bash
+starkli invoke --watch 0x028491f9e3d8b0005a649e08833330de371b5e227be05a0e0575f247df8691a5 transfer_ownership 0x027f68d0d0f474b1a25f359a42dc49a3003a3522d71765a5e7658e68520d7826
+```
 
-starkli transaction 0x0252691273c3ee45f90f2aabc826a048c8ab3513c3e99e9cb54afff1de768ad7
+![Alt text](assets/image-34.png)
 
-### comando favorito
+Si comparamos esto con una llamada `call` al `get_owner`, podemos verificar que la dirección resultante sería `0x027f68d0d0f474b1a25f359a42dc49a3003a3522d71765a5e7658e68520d7826`.
 
-starkli class-hash-at 0x04f00ae43a70c9978c4688621daf599c8b5d102b63d075298b5ce033dc4bff8d
+![Alt text](assets/image-35.png)
 
-![Alt text](image-9.png)
+### Transaction
+En Starkli, también puedes obtener detalles sobre una transacción proporcionando su `hash`. Puedes verificar información como el `tipo de transacción`, el `sender_address`, los datos de la `calldata` y otros datos importantes, incluido el `nonce` y la `signature`, mediante el siguiente comando:
 
+```bash
+starkli transaction 0x03c9283f686f30429324b34a473b22d177e9cda9bdfa54d8346115d0b4c32950
+```
 
-## STARKLI V2 OWNER
+![Alt text](assets/image-36.png)
 
-starkli class-hash Nadai_Ownable.sierra.json
+### Otros Comandos
+Para conocer todos los comandos disponibles, puedes revisar la imagen que se encuentra debajo. Sin embargo, siéntete libre de mantenerte actualizado y explorar por ti mismo los comandos disponibles utilizando:
 
-0x04a0b25575b98b0dd16c1ffe5f85b6b310225437d5c151168c4ba010b498b3a0
+```bash
+starkli --help
+```
 
-starkli declare --watch Nadai_Ownable.sierra.json
+![Alt text](assets/image-37.png)
 
-![Alt text](image-10.png)
+---
 
-starkli deploy --watch 0x04a0b25575b98b0dd16c1ffe5f85b6b310225437d5c151168c4ba010b498b3a0 0x02473316ad605a95287cba2972ec66ab40e2faf0a0f37fba9fbcee29b0f1612d
-
-![Alt text](image-11.png)
-
-starkli call 0x03b6e03f0cb4c6d69de89b3e600893bbb0b143ea689e9fed648f53ea26d68010 get_owner
-
-![Alt text](image-12.png)
-
-starkli invoke --watch 0x03b6e03f0cb4c6d69de89b3e600893bbb0b143ea689e9fed648f53ea26d68010 transfer_ownership 0x03F878C94De81906ba1A016aB0E228D361753536681a776ddA29674FfeBB3CB0
-
-![Alt text](image-14.png)
-
-![Alt text](image-13.png)
-
-
-https://goerli.voyager.online/contract/0x03b6e03f0cb4c6d69de89b3e600893bbb0b143ea689e9fed648f53ea26d68010#readContract
-
-
-starkli invoke --watch 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7 approve 0x03F878C94De81906ba1A016aB0E228D361753536681a776ddA29674FfeBB3CB0 10000 0
-
-![Alt text](image-16.png)
-
-
-starkli invoke --watch 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7 transfer 0x03F878C94De81906ba1A016aB0E228D361753536681a776ddA29674FfeBB3CB0 100000000000000 0
-
-![Alt text](image-18.png)
-
-starkli call 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7 balanceOf 0x2473316ad605a95287cba2972ec66ab40e2faf0a0f37fba9fbcee29b0f1612d 
-
-![Alt text](image-19.png)
-
-0x00000000000000000000000000000000000000000000000000064814f6637cf9 = 1768104730524921 0 = 0.001768 ETH
-
-starkli parse-cairo-string 0x00000000000000000000000000000000000000000000000000737461726b6c69
-
-starkli selector getPublicKey
-
-![Alt text](image-20.png)
-
-
-starkli invoke --watch 0x07686ccbe3e33aefec722bd7211e42e47269f16a2a918318bdb27a99c926899b mint 1 0
-
-starkli deploy --watch 0x026993fbbca1fc804df732e9aeaf421939c7c994c901e11b99256c6e48a7115f 0x62c8d0695de342484df87a02b9565d3d029c19e944177fa3ab6dd2dbc15e660
-
-0x6837fcdea25fa6e8c9ca48eb357f793b751924ae48cdc353e2afab88e7338e2
-0x2e4b8750057c4cff92b18b53cfb6c24b9f2202959a6dbb4b9afb2dcf054624c
+## dApp STARK Easy
