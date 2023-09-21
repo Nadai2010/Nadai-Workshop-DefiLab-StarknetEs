@@ -611,21 +611,29 @@ Esto facilita la corrección de errores y asegura que su código se ajuste a la 
 Con la extensión `Cairo 1` configurada en su entorno de Visual Studio Code, estará listo para trabajar de manera eficiente con la sintaxis de Cairo y aprovechará las funciones de detección de errores y corrección automática proporcionadas por la extensión. Esto es especialmente útil para desarrollar aplicaciones en Cairo de manera más efectiva y sin problemas.
 
 ---
+
 ### Compilación del Contrato
-Ahora procederemos a Compilar nuestro [`Owner.cairo`](/Workshop/src/Owner.cairo). Si ha clonado este repositorio recordamos `git clone ...`, le bastará con correr un comando para que se ejecute la compilación:
+Ahora procederemos a compilar nuestro [`Owner.cairo`](/Workshop/src/Owner.cairo). Si ha clonado este repositorio (recuerde que puede hacerlo con el comando `git clone ...`), le bastará con ejecutar un comando para llevar a cabo la compilación:
 
 ```bash
 scarb build
 ```
 
-Si todo ha ido bien, se le deberá de crear una carpeta `dev/target` con el archivo `Workshop_Ownable.sierra.json` que necesitaremos más adelante para hacer el `Declare` y el `Deploy`. Si por cualqueir motivo no l egenerá este archivo, purebe a borrar la carpeta `target` y volver a generar el `scarb build`
+Si todo ha ido bien, se debería crear una carpeta `dev/target` que contendrá el archivo `Workshop_Ownable.sierra.json`, así como otros contratos adicionales. Aunque nos centraremos en `Owner.cairo`, podría realizar la misma acción para el resto, estos archcvos en versión `sierra.json` los necesitaremospara llevar a cabo las operaciones de `Declare` y `Deploy` Si, por cualquier motivo, no se genera este archivo, puede intentar borrar la carpeta `target` y luego volver a ejecutar el comando `scarb build`.
 
-![Alt text](assets/image-18.png)
+![Captura de Pantalla](assets/image-18.png)
 
 ---
 
 ## Declare del Contrato con Starkli
 Una vez tengamos todo preparado realizaremos la declaración del `Owner.cairo`, está declaración nos servirá para establecer una estrucutra que nos sirva para usar en el futuruo y si queremos volver a usar este contrato, solo usar su mismo `Class Hash` que nos ha dado, y pasar los argumetnos del construcutor que queremos, asi podrimaos tener un `Class hash` de un `ERC-20` standar o con ciertas propiedades, pero cada uno con su owner, nombre, simbolo, total supply o direrentes logicas que s proramaran.
+
+Siempre es importante verificar que los `EXPORT` se hayan realizado correctamente para interactuar con la red de Starknet. 
+
+```bash
+export STARKNET_KEYSTORE=~/.starkli-wallets/deployer/Signer_Workshop.json
+export STARKNET_ACCOUNT=~/.starkli-wallets/deployer/Account_Workshop.json
+```
 
 Si nos encontramos en la carptea raiz de nuestro proyecto tenemos dos opciones, o ir directamente a nuestra carpeta `dev` y ejecutar el `declare` con `starkli`:
 
@@ -647,22 +655,18 @@ En este ejemplo usaremos `Class hash declared:0x064660ad51db85a7c7c5aa7e2adb0b51
 
 ---
 
-## Despligue del Contrato con Starkli
-Ahora que ya tenemos Declarado nuestro contrato siemroe y cuando no lo hubiera sido antes y sea único, sino podrá omitir la declaración y hacer directamnte el despliegue, para ello debreemos de mirar que argumentos se le pasa al contructor del contato, en este caso vemos como pide la dirección del contrato que sera el `owner` así que en este caso añadire la creada para la prueba y fondeada para el workshop `0x009f47ebc2b3062b99e52f3b20b7bce93c6adc19911500cf569ac502fef90f6e`.
+### Despliegue del Contrato con Starkli
+Ahora que hemos declarado nuestro contrato, si no se había hecho anteriormente y es único, podemos omitir la declaración y proceder directamente al despliegue. Para ello, debemos asegurarnos de revisar los argumentos que se pasan al constructor del contrato. En primer lugar, debemos proporcionar el `Class hash` del contrato que queremos desplegar, en este caso será `0x064660ad51db85a7c7c5aa7e2adb0b51c5b86526f02f233368e5e03bb7e702e7`. Además, en el constructor vemos que se requiere la dirección del contrato que actuará como el `owner`, así que en este caso añadiremos la dirección creada para la prueba y financiada para el taller, que es `0x009f47ebc2b3062b99e52f3b20b7bce93c6adc19911500cf569ac502fef90f6e`.
 
 ```rust
-    #[constructor]
-    fn constructor(ref self: ContractState, init_owner: ContractAddress) {
-        self.owner.write(init_owner);
-    }
+#[constructor]
+fn constructor(ref self: ContractState, init_owner: ContractAddress) {
+    self.owner.write(init_owner);
+}
 ```
 
-Y siempre revisar que los `EXPORT` esten realizado para interactuar con la red de Starkent, asi que pasemos los siguientes comando y añadiendo el argumetno requerido de la sigueitn manera:
+Por lo tanto, ejecutamos el siguiente comandosy añadimos el argumento requerido de la siguiente manera:
 
-```bash
-export STARKNET_KEYSTORE=~/.starkli-wallets/deployer/Signer_Workshop.json
-export STARKNET_ACCOUNT=~/.starkli-wallets/deployer/Account_Workshop.json
-```
 
 ```bash
 starkli deploy --watch 0x064660ad51db85a7c7c5aa7e2adb0b51c5b86526f02f233368e5e03bb7e702e7 0x009f47ebc2b3062b99e52f3b20b7bce93c6adc19911500cf569ac502fef90f6e
@@ -670,12 +674,12 @@ starkli deploy --watch 0x064660ad51db85a7c7c5aa7e2adb0b51c5b86526f02f233368e5e03
 
 ![Alt text](assets/image-20.png)
 
-Puede consultar el [Link del Contrato del Owner](https://testnet.starkscan.co/contract/0x028491f9e3d8b0005a649e08833330de371b5e227be05a0e0575f247df8691a5#read-write-contract) para consultar que todo esté correcto, aunque con Starkli podemos directamente hacer llamadas al contrato para revisar que esté todo bien.
+Puedes consultar el [enlace del contrato del "Owner"](https://testnet.starkscan.co/contract/0x028491f9e3d8b0005a649e08833330de371b5e227be05a0e0575f247df8691a5#read-write-contract) para asegurarte de que todo esté correcto. Además, con Starkli, puedes realizar llamadas directas al contrato para verificar que todo esté en orden.
 
 ---
 
-## Invocando Contratos con Starkli
-Desde Starkli podemos cambiar el estado de un contrato, realizar operaciones o hacer consultas a datos y estados de la blockchain, asi que comprobemos si nuestro contrato de owner tiene como dueño la dirección del contrato de cuenta que añadimos, para ello deberemos hacer una `call` e indicar que función vamos a llamar, lo bueno de Starknet son los selectores y en este caso llamaremos a `get_owner` del contrato para que nos de quien es el dueño.
+### Invocando Contratos con Starkli
+Desde Starkli, puedes cambiar el estado de un contrato, realizar operaciones o hacer consultas a datos y estados de la blockchain. Así que comprobemos si nuestro contrato de `Owner.cairo` tiene la dirección del contrato de la cuenta que hemos añadido. Para ello, debemos realizar una `call` e indicar qué función queremos invocar. Lo bueno de Starknet son los selectores, y en este caso, llamaremos a la función `get_owner` del contrato para obtener información sobre quién es el propietario.
 
 ```bash
 starkli call 0x028491f9e3d8b0005a649e08833330de371b5e227be05a0e0575f247df8691a5 get_owner
@@ -683,6 +687,7 @@ starkli call 0x028491f9e3d8b0005a649e08833330de371b5e227be05a0e0575f247df8691a5 
 
 ![Alt text](assets/image-21.png)
 
+---
 ## Consulta de datos con Starkli
 
 ## Gestión de Dependencias Externas en Scarb
