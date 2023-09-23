@@ -65,10 +65,10 @@
 - [Declare del Contrato con Starkli](#declare-del-contrato-con-starkli)
 - [Despliegue del Contrato con Starkli](#despligue-del-contrato-con-starkli)
 - [Invocando Contratos con Starkli](#invocando-contratos-con-starkli)
-- [Consulta de datos con Starkli](#consulta-de-datos-con-starkli)
-- [Gestión de Dependencias Externas en Scarb](#gestión-de-dependencias-externas-en-scarb)
 - [Comandos Starkli](#comandos-starkli)
+- [Gestión de Dependencias Externas en Scarb](#gestión-de-dependencias-externas-en-scarb)
 - [dApp STARK Easy](#dapp-stark-easy)
+  - [Pasos para Desplegar tu Contrato con STARK Easy](#pasos-para-desplegar-tu-contrato-con-stark-easy)
 
 
 ---
@@ -677,26 +677,6 @@ starkli deploy --watch 0x064660ad51db85a7c7c5aa7e2adb0b51c5b86526f02f233368e5e03
 Puedes consultar el [enlace del contrato del "Owner"](https://testnet.starkscan.co/contract/0x028491f9e3d8b0005a649e08833330de371b5e227be05a0e0575f247df8691a5#read-write-contract) para asegurarte de que todo esté correcto. Además, con Starkli, puedes realizar llamadas directas al contrato para verificar que todo esté en orden.
 
 ---
-
----
-## Consulta de datos con Starkli
-
-## Gestión de Dependencias Externas en Scarb
-En Scarb, puedes añadir y gestionar las dependencias desde el archivo `Scarb.toml`. Añadir una dependencia es fácil y se puede hacer de varias maneras, una de ellas es utilizando el comando `scarb add`, que admite una variedad de parámetros para expresar tus dependencias. También puede mantener automáticamente la lista de dependencias ordenada, si no lo está. A continuación, se muestra un ejemplo de cómo agregar una dependencia, como alexandria_math:
-
-```shell
-scarb add alexandria_math --git https://github.com/keep-starknet-strange/alexandria.git --rev 27fbf5b
-```
-
-Para eliminar una dependencia, simplemente debes eliminar las líneas relacionadas en tu archivo Scarb.toml. Como atajo rápido, puedes utilizar el comando `scarb remove`, también conocido como `scarb rm`, que limpiará automáticamente el manifiesto de dependencias, debes indicar cual quieres eliminar como se muestra aquí:
-
-```shell
-scarb rm alexandria_math
-```
-
-Con estas herramientas, puedes gestionar tus dependencias de manera eficiente en Scarb y mantener tu proyecto organizado.
-
----
 ## Comandos Starkli
 ### Class Hash
 Puede conseguir el `class hash` para hacer el `declare` con el comando de starkli un a vez haya compilado su código de cairo, aquí algunos ejemplos
@@ -765,4 +745,72 @@ starkli --help
 
 ---
 
-## dApp STARK Easy
+## Gestión de Dependencias Externas en Scarb
+En Scarb, puedes añadir y gestionar las dependencias desde el archivo `Scarb.toml`. Añadir una dependencia es fácil y se puede hacer de varias maneras, una de ellas es utilizando el comando `scarb add`, que admite una variedad de parámetros para expresar tus dependencias. También puede mantener automáticamente la lista de dependencias ordenada, si no lo está. A continuación, se muestra un ejemplo de cómo agregar una dependencia, como alexandria_math:
+
+```shell
+scarb add alexandria_math --git https://github.com/keep-starknet-strange/alexandria.git --rev 27fbf5b
+```
+
+Para eliminar una dependencia, simplemente debes eliminar las líneas relacionadas en tu archivo Scarb.toml. Como atajo rápido, puedes utilizar el comando `scarb remove`, también conocido como `scarb rm`, que limpiará automáticamente el manifiesto de dependencias, debes indicar cual quieres eliminar como se muestra aquí:
+
+```shell
+scarb rm alexandria_math
+```
+
+Con estas herramientas, puedes gestionar tus dependencias de manera eficiente en Scarb y mantener tu proyecto organizado.
+
+---
+
+## STARK Easy
+[STARK Easy](https://www.starkeasy.app/) es una dApp educativa diseñada tanto para desarrolladores como para usuarios, disponible exclusivamente en la red de testnet de Starknet. Esta plataforma ofrece una amplia variedad de recursos de aprendizaje, talleres, acceso a documentos oficiales y mucho más.
+
+* **Stark Jitsu:** Aquí encontrarás una compilación de recursos de aprendizaje, talleres, documentos y espacios de estudio.
+* **🚧 Stark Adobencha 🚧:** Una sección de entretenimiento educativo, donde podrás divertirte mientras aprendes acerca de diversos temas, tal como los abordados en Stark Jitsu.
+* **Stark Dev-Station:** Esta sección ofrece una variedad de recursos tanto para usuarios como para desarrolladores. Explora aspectos relacionados con Cairo, despliega contratos y descubre el potencial de Starknet de primera mano.
+
+Para obtener una descripción más detallada, consulta el [Readme en Github](https://github.com/Nadai2010/Nadai-StarkEasy/blob/main/Readme.es.md) si es necesario.
+
+Ahora, te mostraremos los pasos para desplegar tu contrato de `Owner` con STARK Easy de manera sencilla:
+
+---
+
+<div align="center">
+
+## Pasos para Desplegar tu Contrato con STARK Easy
+### 1 - Ingresa a [STARK Easy](https://www.starkeasy.app/) y conecta tu billetera.
+
+<img src="assets/image-38.png" alt="Paso 1" width="300" height="auto">
+<img src="assets/image-39.png" alt="Paso 1" width="300" height="auto">
+
+### 2 - Dirígete a la sección `Dev-Station` en la categoría `Standard`.
+
+<img src="assets/image-40.png" alt="Paso 2" width="300" height="auto">
+
+
+### 3 - Selecciona el contrato `Owner Contract` y revisa los argumentos necesarios, como la dirección del contrato (`ContractAddress`), que será la cuenta que actuará como `owner`. Copia el `class hash`, que necesitarás para desplegar tu contrato.
+
+<img src="assets/image-41.png" alt="Paso 3" width="300" height="auto">
+<img src="assets/image-42.png" alt="Paso 3" width="300" height="auto">
+
+### 4 - Una vez que hayas copiado el `class hash`, ve a la sección `Dev-Station` y selecciona `Universal`. Aquí podrás desplegar tu contrato utilizando la declaración existente con la ayuda de `UDC` (Universal Deploy Contract) de Starknet. Completa los siguientes campos:
+</div>
+
+   - `classHash`: 0x04a0b25575b98b0dd16c1ffe5f85b6b310225437d5c151168c4ba010b498b3a0
+   - `satl`: 1
+   - `unique`: 1
+   - `calldata_len`: 1
+   - `calldata`: Dirección que actuará como "owner".
+
+<div align="center">
+<img src="assets/image-44.png" alt="Paso 4" width="300" height="auto">
+
+### 5 - Asegúrate de revisar que la transacción no genere errores y que los datos proporcionados sean correctos. Paga la tarifa (fee), y tu contrato será desplegado. Puedes verificar la actividad de tu billetera y explorar e interactuar con él a través de los exploradores. También puedes utilizar lo aprendido con `Starkli` para interactuar con el contrato.
+
+<img src="assets/image-45.png" alt="Paso 5" width="300" height="auto">
+
+---
+
+STARK Easy facilita el proceso de despliegue de contratos en la red de testnet y te brinda las herramientas necesarias para explorar y aprender más sobre el ecosistema de Starknet. **¡Disfruta de tu experiencia educativa y de desarrollo con STARK Easy!**
+
+</div>
