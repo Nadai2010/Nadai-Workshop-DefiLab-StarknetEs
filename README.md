@@ -22,8 +22,8 @@
 <a href="https://twitter.com/Nadai02010">
 <img src="https://img.shields.io/twitter/follow/Nadai02010?style=social"/>
 </a>
-<a href="https://github.com/Starknet-Es/StarknetEs-Aprendizaje">
-<img src="https://img.shields.io/github/stars/Starknet-Es/StarknetEs-Aprendizaje?style=social"/>
+<a href="https://github.com/Nadai2010/Nadai-Workshop-DefiLab-StarknetEs">
+<img src="https://img.shields.io/github/stars/Nadai2010/Nadai-Workshop-DefiLab-StarknetEs?style=social"/>
 </a>
 
 </div>
