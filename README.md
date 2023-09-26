@@ -147,6 +147,7 @@ starkli --version
 
 **Para actualizar a la última versión de Starkli, simplemente siga los pasos anteriores nuevamente.**
 
+---
 ## Instalación de Scarb
 [Scarb](https://docs.swmansion.com/scarb/) es el administrador de paquetes para Cairo. Entre otras cosas, nos permite compilar código Cairo a Sierra, el lenguaje intermedio entre el Cairo de alto nivel y el ensamblador Cairo de bajo nivel (CASM). Para usuarios de macOS y Linux, abra su terminal y ejecute el siguiente comando:
 
@@ -193,6 +194,8 @@ starkli  --version
 ```
 
 ![Alt text](assets/image-7.png)
+
+---
 
 ## Cuenta y Firmantes
 Una billetera inteligente se compone de dos partes: un `firmante` y un `descriptor de cuenta`.
@@ -301,8 +304,12 @@ En primer lugar, cree una billetera inteligente siguiendo las instrucciones prop
 
 Después de crear su billetera, necesitará financiarla con ETH de prueba, que puede obtener a través de un Faucet, utilizando el Bridge de StarkGate o transfiriéndolos desde otra cuenta (este podriá ser un caso tanto en la red de pruebas como en la principal). Revise la sección [Faucet](#conseguir-faucet) para encontrar enlaces útiles, pero en este tutorial, usaremos la testnet de Goerli en Starknet para implementarlo.
 
+---
+
 ### Desplegar Contrato de Cuenta (Opción B)
 La forma más sencilla de hacerlo es dentro de cada billetera una vez que haya recibido los fondos. Simplemente seleccione la opción de desplegar nuestro Contrato de Cuenta, y luego podremos agregarlo en Starkli para interactuar con Starknet y nuestros Contratos de Cairo.
+
+---
 
 ### Añadir Cuenta y nuevo Firmante
 Ahora podremos crear un nuevo signer y exportar directamente nuestra clave privada para agregarla.
@@ -453,6 +460,8 @@ export STARKNET_KEYSTORE=~/.starkli-wallets/deployer/Braavos_Signer.json
 
 Con estas variables de entorno configuradas, ya tendremos listos nuestra Cuenta y Firmante para interactuar con Starknet a través de los comandos de Starkli. A continuación, procederemos a preparar nuestro contrato para compilarlo con Scarb y luego declararlo y desplegarlo con Starkli. Pero antes, exploraremos la Opción C.
 
+---
+
 ## Crear Cuenta con Starkli Gen-Pair (Opción C)
 Otra opción que podemos utilizar es generar un par de claves, una privada y una pública, utilizando la herramienta Starkli Gen-Pair. Sin embargo, es importante destacar que este método se recomienda principalmente con fines ilustrativos, ya que las opciones anteriores son las más aconsejables desde una perspectiva de seguridad. 
 
@@ -483,6 +492,8 @@ Los siguientes pasos ilustran un flujo de trabajo típico para desarrollar un co
 
 Al integrar Scarb en tu flujo de trabajo, aprovechas sus características para hacer tu proceso de desarrollo más eficiente y manejable.
 
+---
+
 ### Inicialización del Proyecto:
 Para empezar, crearemos un nuevo paquete que generará los archivos `Scarb.toml` y `src/lib.cairo` utilizando el siguiente comando, seguido del nombre del proyecto (en nuestro caso, `Workshop`):
 
@@ -493,6 +504,8 @@ scarb new Workshop
 ![Alt text](assets/image-17.png)
 
 En esta etapa, es importante destacar que, para una gestión más efectiva de los contratos, se recomienda mantener el archivo [`lib.cairo`](/Workshop/src/lib.cairo) para añadir módulos y crear los contratos de manera independiente. Por ejemplo, puedes crear el contrato [`Owner.cairo`](/Workshop/src/Owner.cairo) u otros contratos por separado. Aunque también es posible utilizar el archivo [`lib.cairo`](/Workshop/src/lib.cairo) e incluir el código del contrato que deseas ejecutar, se sugiere seguir la siguiente metodología para una mejor organización.
+
+---
 
 ### Desarrollo del Contrato:
 Comenzamos creando un archivo en la carpeta `src` con el nombre del contrato que deseamos crear, en este caso [`Owner.cairo`](/Workshop/src/Owner.cairo), y pegamos el siguiente código:
